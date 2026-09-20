@@ -462,6 +462,7 @@ def _absolute_cohen_d(negative: pd.Series, positive: pd.Series) -> float:
 def generate_analysis_figures(df: pd.DataFrame) -> None:
     """Generate descriptive figures and marginal-statistics tables."""
     print("[FIGURES] Generating descriptive figures ...")
+    plt.rcParams.update({"pdf.fonttype": 42, "ps.fonttype": 42})
 
     # Figure 1: missingness in the 34 source columns.
     raw_cols = list(df.columns[:34])
@@ -471,16 +472,42 @@ def generate_analysis_figures(df: pd.DataFrame) -> None:
         ascending=True, kind="stable")
     colors = np.where(missing_pct > 20, "#d62728",
                       np.where(missing_pct > 5, "#ff7f0e", "#1f77b4"))
-    fig, ax = plt.subplots(figsize=(12.5, 7.0))
+    missing_labels = {
+        "Cancer Type Detailed": "Detailed cancer type",
+        "Cellularity": "Cellularity",
+        "ER status measured by IHC": "ER status (IHC)",
+        "HER2 status measured by SNP6": "HER2 status (SNP6)",
+        "Neoplasm Histologic Grade": "Histologic grade",
+        "Inferred Menopausal State": "Menopausal state",
+        "Lymph nodes examined positive": "Positive lymph nodes",
+        "Nottingham prognostic index": "Nottingham prognostic index",
+        "Overall Survival (Months)": "Overall survival (months)",
+        "Overall Survival Status": "Overall survival status",
+        "Pam50 + Claudin-low subtype": "PAM50 + Claudin-low subtype",
+        "Patient's Vital Status": "Vital status",
+        "Primary Tumor Laterality": "Primary tumor laterality",
+        "Relapse Free Status (Months)": "Relapse-free survival (months)",
+        "Relapse Free Status": "Relapse-free status",
+        "Type of Breast Surgery": "Breast surgery",
+        "Tumor Other Histologic Subtype": "Other histologic subtype",
+        "3-Gene classifier subtype": "3-gene classifier subtype",
+    }
+    fig, ax = plt.subplots(figsize=(7.4, 5.1))
     ax.barh(missing_pct.index, missing_pct.values, color=colors)
-    ax.axvline(5, color="#ff7f0e", ls="--", lw=1.5,
+    ax.set_yticks(range(len(missing_pct)),
+                  [missing_labels.get(c, c) for c in missing_pct.index])
+    ax.tick_params(axis="y", labelsize=10.5, length=0, pad=4)
+    ax.tick_params(axis="x", labelsize=10.5)
+    ax.margins(y=0.015)
+    ax.axvline(5, color="#ff7f0e", ls="--", lw=1.1,
                label="5% reference")
-    ax.axvline(20, color="#d62728", ls="--", lw=1.5,
+    ax.axvline(20, color="#d62728", ls="--", lw=1.1,
                label="20% reference")
-    ax.set_xlabel("Missing (%)")
-    ax.legend(loc="lower right", fontsize=8)
+    ax.set_xlabel("Missing (%)", fontsize=11)
+    ax.legend(loc="lower right", fontsize=10.5, frameon=False)
     ax.grid(axis="x", alpha=0.25)
-    fig.tight_layout()
+    ax.set_axisbelow(True)
+    fig.tight_layout(pad=0.35)
     save_figure(OUTPUT_DIR / "Figure-1", fig=fig)
     plt.close(fig)
 
@@ -493,23 +520,32 @@ def generate_analysis_figures(df: pd.DataFrame) -> None:
         ("is_luminal", "Luminal Subtype", "Non-Luminal", "Luminal"),
         ("her2_pos", "HER2 Status", "HER2 Negative", "HER2 Positive"),
     ]
-    fig, axes = plt.subplots(2, 3, figsize=(11.5, 6.5), sharey=False)
+    fig, axes = plt.subplots(2, 3, figsize=(7.4, 4.15), sharey=False)
     for panel, (ax, (col, _, neg_label, pos_label)) in enumerate(zip(axes.flat, target_labels)):
         observed = df[col].dropna().astype(int)
         counts = observed.value_counts().reindex([0, 1], fill_value=0)
         bars = ax.bar([0, 1], counts.values,
                       color=["#1f77b4", "#d62728"], alpha=0.85)
-        ax.set_xticks([0, 1], [neg_label, pos_label], rotation=12)
+        wrapped_labels = [label.replace("/", "/\n") if "/" in label
+                          else label.replace(" ", "\n", 1)
+                          if len(label) > 10 else label
+                          for label in (neg_label, pos_label)]
+        ax.set_xticks([0, 1], wrapped_labels)
+        ax.tick_params(axis="x", labelsize=10.5, length=0, pad=4)
+        ax.tick_params(axis="y", labelsize=10.5)
+        ax.set_yticks([0, 1000, 2000])
         ax.text(0.5, 1.03, chr(65 + panel), transform=ax.transAxes,
-                fontweight="bold", ha="center")
-        ax.set_ylabel("Recorded patients")
+                fontsize=12, fontweight="bold", ha="center")
+        ax.set_ylabel("Recorded patients" if panel % 3 == 0 else "",
+                      fontsize=10.5)
         for bar, value in zip(bars, counts.values):
-            ax.text(bar.get_x() + bar.get_width() / 2, value + 20,
-                    f"n={value}\n{100 * value / counts.sum():.1f}%",
-                    ha="center", va="bottom", fontsize=8)
-        ax.set_ylim(0, max(counts.max() * 1.22, 300))
+            ax.text(bar.get_x() + bar.get_width() / 2, value + 35,
+                    f"n={value:,}\n{100 * value / counts.sum():.1f}%",
+                    ha="center", va="bottom", fontsize=10.5)
+        ax.set_ylim(0, 2900)
         ax.grid(axis="y", alpha=0.2)
-    fig.tight_layout()
+        ax.set_axisbelow(True)
+    fig.tight_layout(pad=0.45, w_pad=0.7, h_pad=1.3)
     save_figure(OUTPUT_DIR / "Figure-2", fig=fig)
     plt.close(fig)
 
@@ -519,19 +555,50 @@ def generate_analysis_figures(df: pd.DataFrame) -> None:
         FEATURE_LABELS.get(c, c) for c in correlation_data.columns]
     correlation = correlation_data.corr()
     mask = np.triu(np.ones_like(correlation, dtype=bool))
-    fig, ax = plt.subplots(figsize=(11.5, 10.5))
-    sns.heatmap(correlation, mask=mask, annot=True, fmt=".2f",
+    correlation_labels = {
+        "Age (yrs)": "Age (years)",
+        "Histologic Grade": "Histologic grade",
+        "LN Positive (count)": "Positive nodes",
+        "Mutation Count": "Mutation count",
+        "NPI Score": "NPI score",
+        "Tumor Size (mm)": "Tumor size (mm)",
+        "Tumor Stage": "Tumor stage",
+        "Post-Menopausal": "Postmenopausal",
+        "LN Positive (flag)": "Node-positive",
+        "High Grade (G3)": "Grade 3",
+        "log(Mutation Count)": "ln(1 + mutations)",
+        "Tumor Size (cm)": "Tumor size (cm)",
+        "NPI Group": "NPI group",
+        "Age Group": "Age group",
+    }
+    labels = [correlation_labels.get(c, c) for c in correlation.columns]
+    annotations = correlation.map(
+        lambda value: f"{value:.2f}".replace("-0.", "-.").replace("0.", "."))
+    annotations = annotations.replace("-.00", ".00")
+    fig = plt.figure(figsize=(7.4, 6.6))
+    ax = fig.add_axes([0.21, 0.21, 0.775, 0.775])
+    cbar_ax = ax.inset_axes([0.59, 0.90, 0.36, 0.025])
+    sns.heatmap(correlation, mask=mask, annot=annotations, fmt="",
                 cmap="RdBu_r", center=0, vmin=-1, vmax=1, square=True,
-                linewidths=0.25, annot_kws={"size": 6}, ax=ax,
-                cbar_kws={"label": "Pearson r", "shrink": 0.75})
+                linewidths=0.25,
+                annot_kws={"size": 8.4, "family": "DejaVu Sans",
+                           "fontstretch": "condensed"}, ax=ax,
+                cbar_ax=cbar_ax,
+                cbar_kws={"label": "Pearson r", "orientation": "horizontal",
+                          "ticks": [-1, 0, 1]})
+    for annotation, value in zip(ax.texts, correlation.to_numpy()[~mask]):
+        annotation.set_color("white" if abs(value) >= 0.65 else "#171717")
     # Matplotlib rasterizes continuous colorbar strips by default in some
     # releases; force its solids to remain vector paths in the PDF artifact.
     colorbar = ax.collections[0].colorbar
     if colorbar is not None and colorbar.solids is not None:
         colorbar.solids.set_rasterized(False)
-    ax.tick_params(axis="x", labelsize=7, rotation=90)
-    ax.tick_params(axis="y", labelsize=7)
-    fig.tight_layout()
+    cbar_ax.tick_params(labelsize=10, length=3, pad=2)
+    cbar_ax.set_xlabel("Pearson r", fontsize=11, labelpad=3)
+    ax.set_xticklabels(labels, rotation=65, ha="right", rotation_mode="anchor")
+    ax.set_yticklabels(labels, rotation=0)
+    ax.tick_params(axis="x", labelsize=10, length=0, pad=4)
+    ax.tick_params(axis="y", labelsize=10, length=0, pad=4)
     save_figure(OUTPUT_DIR / "Figure-3", fig=fig)
     plt.close(fig)
 

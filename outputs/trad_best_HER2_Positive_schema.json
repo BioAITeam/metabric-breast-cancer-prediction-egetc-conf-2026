@@ -1,0 +1,30 @@
+{
+  "target": "HER2_Positive",
+  "best_model": "Logistic Regression",
+  "features": [
+    "Age (yrs)",
+    "Histologic Grade",
+    "LN Positive (count)",
+    "Mutation Count",
+    "NPI Score",
+    "Tumor Size (mm)",
+    "Tumor Stage",
+    "ER Status",
+    "PR Status",
+    "Chemotherapy",
+    "Hormone Therapy",
+    "Radio Therapy",
+    "Mastectomy",
+    "Post-Menopausal",
+    "LN Positive (flag)",
+    "High Grade (G3)",
+    "log(Mutation Count)",
+    "Tumor Size (cm)",
+    "NPI Group",
+    "Age Group"
+  ],
+  "n": 1297,
+  "positives": 160,
+  "seed": 42,
+  "smote_training_only": true
+}

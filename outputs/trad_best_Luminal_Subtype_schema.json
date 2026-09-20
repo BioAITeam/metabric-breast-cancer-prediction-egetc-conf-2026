@@ -1,0 +1,32 @@
+{
+  "target": "Luminal_Subtype",
+  "best_model": "Stacking Ensemble",
+  "features": [
+    "Age (yrs)",
+    "Histologic Grade",
+    "LN Positive (count)",
+    "Mutation Count",
+    "NPI Score",
+    "Tumor Size (mm)",
+    "Tumor Stage",
+    "ER Status",
+    "PR Status",
+    "HER2 Status",
+    "Chemotherapy",
+    "Hormone Therapy",
+    "Radio Therapy",
+    "Mastectomy",
+    "Post-Menopausal",
+    "LN Positive (flag)",
+    "High Grade (G3)",
+    "log(Mutation Count)",
+    "Tumor Size (cm)",
+    "NPI Group",
+    "Age Group",
+    "ER \u00d7 HER2"
+  ],
+  "n": 1297,
+  "positives": 809,
+  "seed": 42,
+  "smote_training_only": false
+}

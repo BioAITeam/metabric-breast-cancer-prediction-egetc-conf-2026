@@ -1,0 +1,30 @@
+{
+  "target": "NPI_High_Risk",
+  "best_model": "Random Forest",
+  "features": [
+    "Age (yrs)",
+    "Histologic Grade",
+    "LN Positive (count)",
+    "Mutation Count",
+    "Tumor Size (mm)",
+    "Tumor Stage",
+    "ER Status",
+    "PR Status",
+    "HER2 Status",
+    "Chemotherapy",
+    "Hormone Therapy",
+    "Radio Therapy",
+    "Mastectomy",
+    "Post-Menopausal",
+    "LN Positive (flag)",
+    "High Grade (G3)",
+    "log(Mutation Count)",
+    "Tumor Size (cm)",
+    "Age Group",
+    "ER \u00d7 HER2"
+  ],
+  "n": 1297,
+  "positives": 136,
+  "seed": 42,
+  "smote_training_only": true
+}

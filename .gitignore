@@ -1,0 +1,57 @@
+# Python environments and caches
+venv/
+.venv/
+env/
+ENV/
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Internal tests and tool caches
+/tests/
+/code/validate_evaluation.py
+/code/validate_outputs.py
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+.coverage
+htmlcov/
+
+# Packaging and build products
+build/
+dist/
+*.egg-info/
+
+# Operating-system and editor files
+.DS_Store
+Thumbs.db
+Desktop.ini
+.idea/
+.vscode/
+
+# Secrets, logs, and temporary files
+/temp/
+.env
+.env.*
+!.env.example
+*.log
+*.tmp
+*.bak
+*.lock
+~$*
+*.pem
+*.key
+credentials*.json
+
+# Regenerable models and framework workspaces
+work/
+*.pkl
+*.joblib
+*.pt
+*.pth
+*.zip
+
+# Locally supplied source data
+/data/raw/*
+!/data/raw/.gitkeep

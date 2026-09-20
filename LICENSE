@@ -1,0 +1,56 @@
+Noncommercial Research and Education License
+Version 1.0
+
+Copyright (c) 2026 the repository contributors.
+
+1. Scope and permission
+
+This license applies to the original code and documentation in this repository
+(the "Software") to the extent that the contributors hold the relevant rights.
+Permission is granted, without charge, to use, copy, modify, and redistribute
+the Software solely for noncommercial research or educational purposes, subject
+to the conditions below.
+
+2. Noncommercial use
+
+Noncommercial use means use that is not primarily intended for commercial
+advantage or monetary compensation. Commercial use, including incorporation
+into commercial products or services, is not permitted under this license and
+requires separate written permission from the relevant copyright holders.
+
+3. Required citation
+
+Any publication, report, presentation, teaching material, or other publicly
+shared work that uses the Software or results obtained with it must cite:
+
+Tri Nham, Harold Brayan Arteaga-Arteaga, Mario Alejandro Bravo-Ortiz,
+Reinel Tabares-Soto, Alejandro Hernandez, Gerardo Arenas, and
+Pablo Guillen-Rondon. Multi-Target Machine Learning for Breast Cancer Prognosis
+and Molecular Classification Using METABRIC. 2026.
+
+Use the final published bibliographic details and DOI when available.
+Citation does not waive the noncommercial-use restriction.
+
+4. Redistribution and modifications
+
+Copies or redistributions of the Software, including modified versions, must
+retain this license, the copyright notice, and the citation requirement.
+Modifications must be identified, and no endorsement by the original authors
+may be implied. Recipients remain subject to the conditions of this license
+for the original Software and its incorporated portions.
+
+5. Third-party materials and data
+
+This license does not grant rights to third-party libraries, datasets, or other
+third-party materials. METABRIC data and any rights in data-derived artifacts
+remain subject to their applicable source terms. This license does not replace
+or override those terms.
+
+6. Disclaimer
+
+The Software is provided "as is", without warranties of any kind, to the extent
+permitted by applicable law. To that extent, the copyright holders are not
+liable for claims or damages arising from use of the Software. Nothing in this
+license limits rights or exceptions that cannot be restricted by applicable law.
+
+All rights not expressly granted are reserved.

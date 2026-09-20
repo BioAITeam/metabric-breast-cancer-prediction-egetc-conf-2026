@@ -101,7 +101,5 @@ To use those newly generated outer predictions in the nested analysis, pass `--r
 - NPI and its ordinal group are excluded from T3; HER2 and its ER interaction are excluded from T6. Retained NPI components still make T3 reconstructive rather than independent prognosis.
 - Status endpoints do not model censoring, competing risks, or a fixed prediction horizon. Treatment associations are not causal effects.
 - Threshold 0.5 and training-selected Youden operating points are reported separately.
-- SHAP uses explanatory splits with seeds 42, 43, and 44, not the nested performance estimator.
 - Performance estimates come from resampling this cohort; no independent external cohort was evaluated.
 - Pinned versions, seeded components, and single-threaded execution support reproducibility. Hardware, library builds, and MLJAR's time budget can still affect refitted results.
-- Figures are vector PDFs with 300 dpi specified for rasterized artists. Rendering can vary across platforms.
